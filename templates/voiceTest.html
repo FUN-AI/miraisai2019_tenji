@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <title>voice test</title>
+  </head>
+  <body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <a id="download">Download</a>
+    <button id="stop">Stop</button>
+  </body>
+
+  <script type="text/javascript">
+
+  let shouldStop = false;
+  let stopped = false;
+  const downloadLink = document.getElementById('download');
+  const stopButton = document.getElementById('stop');
+
+  stopButton.addEventListener('click', function() {
+    shouldStop = true;
+  })
+
+  var handleSuccess = function(stream) {
+    // 音声認識
+    SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+    const recognition = new SpeechRecognition();
+    // 音声系
+    const options = {mimeType: 'video/webm;codecs=vp9'};
+    const recordedChunks = [];
+    const mediaRecorder = new MediaRecorder(stream, options);  
+
+    mediaRecorder.addEventListener('dataavailable', function(e) {
+      if (e.data.size > 0) { // データがある場合
+        recordedChunks.push(e.data);
+      }
+
+      if(shouldStop === true && stopped === false) {
+        // レコーダーストップとフラグ立て
+        mediaRecorder.stop();
+        stopped = true;
+        AISpeak('hello!');
+      }
+    });
+
+    mediaRecorder.addEventListener('stop', function() {
+      new Blob(recordedChunks)
+    });
+
+    mediaRecorder.start(1000);
+  };
+
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    .then(handleSuccess)
+
+  function AISpeak(speechText) {
+    // 発言作成
+    const uttr = new SpeechSynthesisUtterance(speechText)
+    // 発言キューに発言を追加
+    speechSynthesis.speak(uttr)
+  }
+
+  function send() {
+    if(var_stream!=null) {
+      $.ajax({
+        url: 'http://localhost:8080/image',
+        type: 'POST',
+        dataType: 'json',
+        data: var_stream,
+        processData: false,
+        contentType: false,
+
+        success: function(data) {
+          // 顔がある場合
+          if(data['status'] == 1) {
+            console.log(data);
+          }
+        }
+      });
+    }
+  }
+
+</script>
+</html>

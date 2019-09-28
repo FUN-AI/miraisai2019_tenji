@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <title>voice test</title>
+  </head>
+  <body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <a id="download">Download</a>
+    <button onclick='AIListenStart()' id="start">start</button>
+  </body>
+
+  <script type="text/javascript">
+  SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'ja-JP';
+  recognition.continuous = true;
+  var get_text = null;
+  var menu = null;
+
+  recognition.onresult = (event) => {
+    console.log(event.results[0][0].transcript);
+    get_text = event.results[0][0].transcript
+    send();
+    recognition.stop();
+  }
+
+  function AIListenStart(turn) {
+    recognition.start();
+  }
+
+  function AISpeak(speechText) {
+    // 発言作成
+    const uttr = new SpeechSynthesisUtterance(speechText)
+    // 発言キューに発言を追加
+    speechSynthesis.speak(uttr)
+  }
+
+  function send() {
+    if(get_text!=null) {
+      const formdata = new FormData();
+      formdata.append('text', get_text)
+      $.ajax({
+      url: 'http://localhost:8080/returnVoice',
+      type: 'POST',
+      dataType: 'json',
+      data: formdata,
+      processData: false,
+      contentType: false,
+
+      success: function(data) {
+        AISpeak(data['say']);
+        menu = data['menus'];
+      }
+    });
+
+    }
+  }
+
+</script>
+</html>

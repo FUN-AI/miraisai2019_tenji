@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <title>Camera test</title>
+  </head>
+  <body>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <button onclick="startVideo()">Start</button>
+    <br />
+    <video id="testCamera" autoplay style='width: 320px; height: 240px; border: 1px solid black;'></video>
+  </body>
+
+  <script type="text/javascript">
+  setInterval('send()', 1000);
+  var video = document.createElement('video');
+
+  navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    .then(function (stream) { // success
+      document.getElementById('testCamera').srcObject = stream;
+      video.srcObject = stream;
+      });
+
+  function makePicture() {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d')
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, Math.floor((canvas.height-video.width)/2), 0);
+    var dataURL = canvas.toDataURL('image/jpeg');
+    return dataURL;
+  }
+
+  function send() {
+    if(video!=null) {
+      const picture = makePicture();
+      var formData = new FormData();
+      formData.append('img', picture);
+      $.ajax({
+        url: 'http://localhost:8080/image',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        
+        success: function(data) {
+          // 顔がある場合
+          if(data['status'] == 1) {
+            console.log(data);
+          }
+        }
+      });
+    }
+  }
+
+</script>
+</html>
