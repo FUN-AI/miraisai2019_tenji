@@ -32,10 +32,11 @@ def testVoice():
 def testMenu():
   return jsonify({'say': request.form['text'], 'menus': ['aa', 'bb']})
 
+from menu import Menu
+menu_controle = Menu()
 @app.route('/menu', methods=['POST'])
 def menu():
-  say_text = 'はじめまして'
-  menus = ['aa', 'bb']
+  say_text, menus = menu_controle.run(request.form['text'])
   return jsonify({'say': say_text, 'menus': menus})
 
 if __name__ == "__main__":
