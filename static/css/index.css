@@ -1,0 +1,56 @@
+
+body {
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+}
+
+#AI_text {
+	grid-area: AI_text;
+	background: #111;
+	border: double 6px #FFF;
+	padding: 2px;
+	border-radius: 12px;
+	box-sizing: border-box;
+}
+
+#AI_text p {
+	font-weight: bold;
+	font-size: large;
+	color: #0F0;
+	padding: 0 1em;
+}
+
+#AI_button {
+	grid-area: AI_button;
+}
+
+#AI_image {
+	grid-area: AI_image;
+	position: relative;
+}
+
+#AI_image img {
+	max-width: 100%;
+	max-height: 100%;
+	position: absolute;
+	bottom: 0;
+}
+
+#FUN_AI {
+	grid-area: FUN_AI;
+}
+
+#FUN_AI p {
+	padding: 0 1em;
+}
+
+#AI_root {
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	grid-template-areas: "AI_text AI_image" "AI_button AI_image" "FUN_AI AI_image";
+	grid-template-columns: 60% 40%;
+	grid-template-rows: 1fr 240px 2.5em;
+}
+

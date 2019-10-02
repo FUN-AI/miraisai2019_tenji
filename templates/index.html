@@ -2,12 +2,44 @@
 <html>
   <head>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <title>welcome</title>
+	<link rel="stylesheet" type="text/css" href="./static/css/index.css">
+	<link rel="stylesheet" type="text/css" href="https://tomsuzuki.github.io/css/base.css">
+	<link rel="shortcut icon" href="./static/img/icon-mini.gif">
+	<title>welcome</title>
   </head>
-  <body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <body class="bg_grid">
+	  <!-- jqueryのロード -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	
+	<!-- 仮のHTML -->
+	<div id="AI_root">
+		<!-- テキスト画面 -->
+		<div id="AI_text">
+			<p>
+				>> テストメッセージです。<br>
+				AI > こんにちは
+			</p>
+		</div>
+
+		<!-- 画像のところ -->
+		<div id="AI_image">
+			<img src="./static/img/ia1203.png"/>
+		</div>
+
+		<!-- ボタンのところ -->
+		<div id="AI_button">
+
+		</div>
+
+		<!-- FUN AIの文字入れる部分 -->
+		<div id="FUN_AI">
+			<p>MADE BY FUN_AI @2019</p>
+		</div>
+	</div>
+
   </body>
 
+  <!-- あとで別ファイルに移す（移したら上のjqueryのロードの1行下にファイルを読み込む文を書く） -->
   <script type="text/javascript">
 
   // メニュー
