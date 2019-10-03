@@ -1,0 +1,106 @@
+// メニュー
+var menu = null;
+
+// 音声認識の設定
+SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.lang = 'ja-JP';
+recognition.continuous = true;
+var get_text = null;
+var face_check = 0;
+var start_flag = false;
+
+// 音声認識終わったときの処理
+recognition.onresult = (event) => {
+	console.log(event.results[0][0].transcript);
+	get_text = event.results[0][0].transcript
+	speech_send();
+	// 一々切ってる
+	recognition.stop();
+}
+
+// 音声認識のスタート
+function listenStart() {
+	start_flag = true;
+	recognition.start();
+}
+
+// 音声合成
+function AISpeak(speechText) {
+	// 発言作成
+	const uttr = new SpeechSynthesisUtterance(speechText)
+	// 発言キューに発言を追加
+	speechSynthesis.speak(uttr)
+}
+
+// 音声をサーバーに送る
+function speech_send() {
+	if (get_text != null) {
+		const formdata = new FormData();
+		formdata.append('text', get_text)
+
+		$.ajax({
+			url: 'http://localhost:8080/menu',
+			type: 'POST',
+			dataType: 'json',
+			data: formdata,
+			processData: false,
+			contentType: false,
+
+			success: function (data) {
+				AISpeak(data['say']);
+				menu = data['menus'];
+				console.log(menu);
+			}
+		});
+		start_flag = false;
+	}
+}
+
+// -------画像------
+// 1秒ごとに画像をサーバーに送信する
+setInterval('img_send()', 1000);
+// 一次的ビデオ置き場
+var video = document.createElement('video');
+
+// ビデオ取得設定
+navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+	.then(function (stream) {
+		video.srcObject = stream;
+	});
+
+// ビデオから画像を作成
+function makePicture() {
+	var canvas = document.createElement('canvas');
+	var ctx = canvas.getContext('2d')
+	canvas.width = video.videoWidth;
+	canvas.height = video.videoHeight;
+	ctx.drawImage(video, Math.floor((canvas.height - video.width) / 2), 0);
+	var dataURL = canvas.toDataURL('image/jpeg');
+	return dataURL;
+}
+
+function img_send() {
+	if (video != null) {
+		const picture = makePicture();
+		var formData = new FormData();
+		formData.append('img', picture);
+
+		$.ajax({
+			url: 'http://localhost:8080/image',
+			type: 'POST',
+			data: formData,
+			contentType: false,
+			processData: false,
+
+			success: function (data) {
+				// 顔のチェック
+				face_check = data['status'];
+				if (face_check == 1 && !(start_flag)) {
+					listenStart();
+				}
+			}
+		});
+
+	}
+}
