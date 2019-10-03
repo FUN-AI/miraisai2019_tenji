@@ -22,9 +22,6 @@ class MenuTest(unittest.TestCase):
     value = 'おはようございます'
     pat = ['おはよう', 'こんにちは']
     self.assertEqual(0, menu.pat_match(value, pat))
-  
-  def test_get_next_pat(self):
-    menu =
 
 if __name__ == '__main__':
   unittest.main()
