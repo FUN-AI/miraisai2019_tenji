@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="https://tomsuzuki.github.io/css/base.css">
 	<link rel="stylesheet" type="text/css" href="./static/css/index.css">
 	<link rel="shortcut icon" href="./static/img/icon-mini.gif">
+	<script src="./static/js/html.js"></script>
 	<title>FUN AI 2019</title>
 </head>
 
@@ -18,9 +19,8 @@
 	<div id="AI_root">
 		<!-- テキスト画面 -->
 		<div id="AI_text">
-			<p>
-				>> テストメッセージです。<br>
-				AI > こんにちは
+			<p id="AI_textWindow">
+				JavaScriptを有効にしてください。
 			</p>
 		</div>
 
@@ -33,9 +33,9 @@
 		<div id="AI_button">
 			<h2>選択肢</h2>
 			<ul id="AI_select">
-				<li><a href="#">せんたくし１</a></li>
-				<li><a href="#">せんたくし２</a></li>
-				<li><a href="#">せんたくし３</a></li>
+				<li><a href="#" id="AI_select_1">ERROR</a></li>
+				<li><a href="#" id="AI_select_2">ERROR</a></li>
+				<li><a href="#" id="AI_select_3">ERROR</a></li>
 			</ul>
 		</div>
 
