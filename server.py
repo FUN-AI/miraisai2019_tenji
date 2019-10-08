@@ -20,8 +20,12 @@ def testVideo():
 def getImage():
   get_data = request.form['img']
   dec_data = base64.b64decode( get_data.split(',')[1] )
-  dec_img  = Image.open(BytesIO(dec_data))
+  try:
+    dec_img = Image.open(BytesIO(dec_data))
+  except:
+    return jsonify({'status': 0})
 
+  print(dec_img.size)
   return jsonify({'status': 1})
 
 @app.route('/voice')
@@ -36,8 +40,8 @@ from menu import Menu
 menu_controle = Menu()
 @app.route('/menu', methods=['POST'])
 def menu():
-  say_text, menus = menu_controle.run(request.form['text'])
-  return jsonify({'say': say_text, 'menus': menus})
+  say_text, next_menus = menu_controle.run(request.form['text'])
+  return jsonify({'say': say_text, 'menus': next_menus})
 
 if __name__ == "__main__":
   app.run(debug=True, port=8080)
