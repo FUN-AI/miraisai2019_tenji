@@ -16,17 +16,25 @@ def testpage(test):
 def testVideo():
   return render_template('videotest.html')
 
+from face import face_check
 @app.route('/image', methods=['POST'])
 def getImage():
+  # 取得したデータを画像に変換
   get_data = request.form['img']
   dec_data = base64.b64decode( get_data.split(',')[1] )
+  # 画像がnullならerrorでるからキャッチで判別
   try:
     dec_img = Image.open(BytesIO(dec_data))
   except:
     return jsonify({'status': 0})
-
-  print(dec_img.size)
-  return jsonify({'status': 1})
+  
+  # 顔認証
+  if face_check(dec_img):
+    print('return 1')
+    return jsonify({'status': 1})
+  else:
+    print('return 0')
+    return jsonify({'status': 0})
 
 @app.route('/voice')
 def testVoice():
