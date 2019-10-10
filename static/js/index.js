@@ -54,6 +54,7 @@ function speech_send() {
 			}
 		});
 		start_flag = false;
+		get_text = null;
 	}
 }
 
@@ -67,6 +68,7 @@ var video = document.createElement('video');
 navigator.mediaDevices.getUserMedia({ video: true, audio: false })
 	.then(function (stream) {
 		video.srcObject = stream;
+		video.play();
 	});
 
 // ビデオから画像を作成
@@ -75,7 +77,8 @@ function makePicture() {
 	var ctx = canvas.getContext('2d')
 	canvas.width = video.videoWidth;
 	canvas.height = video.videoHeight;
-	ctx.drawImage(video, Math.floor((canvas.height - video.width) / 2), 0);
+	ctx.drawImage(video, 0, 0, Math.floor((canvas.height - video.width) / 2), Math.floor((canvas.height - video.width) / 2));
+	//ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 	var dataURL = canvas.toDataURL('image/jpeg');
 	return dataURL;
 }

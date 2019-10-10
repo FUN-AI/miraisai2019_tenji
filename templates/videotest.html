@@ -19,6 +19,7 @@
     .then(function (stream) { // success
       document.getElementById('testCamera').srcObject = stream;
       video.srcObject = stream;
+      video.play()
       });
 
   function makePicture() {
@@ -26,8 +27,9 @@
     var ctx = canvas.getContext('2d')
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    ctx.drawImage(video, Math.floor((canvas.height-video.width)/2), 0);
+    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
     var dataURL = canvas.toDataURL('image/jpeg');
+
     return dataURL;
   }
 
