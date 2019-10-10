@@ -1,5 +1,7 @@
 import json, codecs
 from os import chdir
+from pykakasi import kakasi
+
 class Menu:
   def __init__(self):
     self.switch = None
@@ -8,6 +10,12 @@ class Menu:
     self.pat_graph = self.read_json()
     self.next_ptr = [0]
     self.did_ptr = 0
+    kakasiKn2H = kakasi()
+    kakasiKn2H.setMode('J', 'H')
+    self.kn2hConv = kakasiKn2H.getConverter()
+    kakasiKt2H = kakasi()
+    kakasiKt2H.setMode('K', 'H')
+    self.kt2hConv = kakasiKt2H.getConverter()
 
   def read_json(self):
     menu = []
@@ -45,6 +53,9 @@ class Menu:
     return say_value, pat
 
   def run(self, v):
+    v = self.kn2hConv.do(v)
+    v = self.kt2hConv.do(v)
+    
     if self.next_ptr==0:
       return self.outmaker(0, self.pat_graph[0][1])
     pat , temp_ptr = self.get_next_pat()
