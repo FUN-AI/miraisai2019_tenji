@@ -14,15 +14,20 @@ var start_flag = false;
 recognition.onresult = (event) => {
 	console.log(event.results[0][0].transcript);
 	get_text = event.results[0][0].transcript
-	speech_send();
 	// 一々切ってる
 	recognition.stop();
+	speech_send();
 }
 
 // 音声認識のスタート
 function listenStart() {
+	if (!(start_flag)) {
+		recognition.start();
+	}
+}
+
+recognition.onaudiostart = function () {
 	start_flag = true;
-	recognition.start();
 }
 
 // 音声合成
@@ -31,7 +36,16 @@ function AISpeak(speechText) {
 	const uttr = new SpeechSynthesisUtterance(speechText)
 	// 発言キューに発言を追加
 	speechSynthesis.speak(uttr)
+	uttr.onend = function () {
+		start_flag = false;
+	}
 }
+
+/*
+if (!speechSynthesis.pending) {
+	start_flag = false;
+}
+*/
 
 // 音声をサーバーに送る
 function speech_send() {
@@ -51,9 +65,9 @@ function speech_send() {
 				AISpeak(data['say']);
 				menu = data['menus'];
 				console.log(menu);
+				updateSelect(menu[0], menu[1], menu[2]);
 			}
 		});
-		start_flag = false;
 		get_text = null;
 	}
 }
@@ -99,7 +113,7 @@ function img_send() {
 			success: function (data) {
 				// 顔のチェック
 				face_check = data['status'];
-				if (face_check == 1 && !(start_flag)) {
+				if (face_check == 1) {
 					listenStart();
 				}
 			}
