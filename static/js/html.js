@@ -1,9 +1,11 @@
 // 表示用のJSのファイル
+var logHTML = "";
 
 // 表示テキストを更新する（AI_textWindow）
 function updateText(text) {
+	addLog(text);
 	const AI_textWindow = document.getElementById("AI_textWindow");
-	AI_textWindow.innerHTML = text;
+	AI_textWindow.innerHTML = logHTML;
 }
 
 // 選択肢を更新する（AI_select_1, AI_select_2, AI_select_3）
@@ -18,7 +20,16 @@ function updateSelect(s1, s2, s3) {
 
 
 // ロード時にエラーメッセージを削除する
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 	updateText("起動中...");
-	updateSelect("( ✌︎'ω')✌︎","( ✌︎'ω')✌︎","( ✌︎'ω')✌︎");
+	updateSelect("( ✌︎'ω')✌︎", "( ✌︎'ω')✌︎", "( ✌︎'ω')✌︎");
 });
+
+// ログの追加
+function addLog(text) {
+	// 追加
+	logHTML = logHTML + "¥n" + text;
+
+	// 多すぎたら削除（100行くらい残す？）
+	// 後で書く
+}
