@@ -30,10 +30,10 @@ def getImage():
   
   # 顔認証
   if face_check(dec_img):
-    print('return 1')
+    #print('return 1')
     return jsonify({'status': 1})
   else:
-    print('return 0')
+    #print('return 0')
     return jsonify({'status': 0})
 
 @app.route('/voice')

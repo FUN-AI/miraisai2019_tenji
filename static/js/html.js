@@ -18,7 +18,7 @@ function updateSelect(s1, s2, s3) {
 
 
 // ロード時にエラーメッセージを削除する
-document.addEventListener("DOMContentLoaded", function() {
-	updateText("起動中...");
-	updateSelect("( ✌︎'ω')✌︎","( ✌︎'ω')✌︎","( ✌︎'ω')✌︎");
+document.addEventListener("DOMContentLoaded", function () {
+	updateText("起動中...話しかけて下さい...");
+	updateSelect("( ✌︎'ω')✌︎", "( ✌︎'ω')✌︎", "( ✌︎'ω')✌︎");
 });

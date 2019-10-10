@@ -14,15 +14,20 @@ var start_flag = false;
 recognition.onresult = (event) => {
 	console.log(event.results[0][0].transcript);
 	get_text = event.results[0][0].transcript
-	speech_send();
 	// 一々切ってる
 	recognition.stop();
+	speech_send();
 }
 
 // 音声認識のスタート
 function listenStart() {
+	if (!(start_flag)) {
+		recognition.start();
+	}
+}
+
+recognition.onaudiostart = function () {
 	start_flag = true;
-	recognition.start();
 }
 
 // 音声合成
@@ -31,11 +36,15 @@ function AISpeak(speechText) {
 	const uttr = new SpeechSynthesisUtterance(speechText)
 	// 発言キューに発言を追加
 	speechSynthesis.speak(uttr)
+	uttr.onend = function () {
+		start_flag = false;
+	}
 }
 
 // 音声をサーバーに送る
 function speech_send() {
 	if (get_text != null) {
+		updateText(get_text);
 		const formdata = new FormData();
 		formdata.append('text', get_text)
 
@@ -49,11 +58,13 @@ function speech_send() {
 
 			success: function (data) {
 				AISpeak(data['say']);
+				updateText(data['say']);
 				menu = data['menus'];
 				console.log(menu);
+				updateSelect(menu[0], menu[1], menu[2]);
 			}
 		});
-		start_flag = false;
+		get_text = null;
 	}
 }
 
@@ -67,6 +78,7 @@ var video = document.createElement('video');
 navigator.mediaDevices.getUserMedia({ video: true, audio: false })
 	.then(function (stream) {
 		video.srcObject = stream;
+		video.play();
 	});
 
 // ビデオから画像を作成
@@ -75,7 +87,8 @@ function makePicture() {
 	var ctx = canvas.getContext('2d')
 	canvas.width = video.videoWidth;
 	canvas.height = video.videoHeight;
-	ctx.drawImage(video, Math.floor((canvas.height - video.width) / 2), 0);
+	ctx.drawImage(video, 0, 0, Math.floor((canvas.height - video.width) / 2), Math.floor((canvas.height - video.width) / 2));
+	//ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 	var dataURL = canvas.toDataURL('image/jpeg');
 	return dataURL;
 }
@@ -96,7 +109,7 @@ function img_send() {
 			success: function (data) {
 				// 顔のチェック
 				face_check = data['status'];
-				if (face_check == 1 && !(start_flag)) {
+				if (face_check == 1) {
 					listenStart();
 				}
 			}
