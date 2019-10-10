@@ -41,15 +41,10 @@ function AISpeak(speechText) {
 	}
 }
 
-/*
-if (!speechSynthesis.pending) {
-	start_flag = false;
-}
-*/
-
 // 音声をサーバーに送る
 function speech_send() {
 	if (get_text != null) {
+		updateText(get_text);
 		const formdata = new FormData();
 		formdata.append('text', get_text)
 
@@ -63,6 +58,7 @@ function speech_send() {
 
 			success: function (data) {
 				AISpeak(data['say']);
+				updateText(data['say']);
 				menu = data['menus'];
 				console.log(menu);
 				updateSelect(menu[0], menu[1], menu[2]);
