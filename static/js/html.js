@@ -28,8 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
 // ログの追加
 function addLog(text) {
 	// 追加
-	logHTML = logHTML + "¥n" + text;
+	logHTML = logHTML + "<br>" + text;
 
 	// 多すぎたら削除（100行くらい残す？）
 	// 後で書く
+
+	console.log("---"+logHTML);
 }
