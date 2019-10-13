@@ -1,6 +1,22 @@
 // メニュー
 var menu = null;
 
+/*
+// ボタン
+document.getElementById("AI_select_1").onclick = function () {
+    get_text = document.getElementById("AI_select_1").innerHTML;
+    speech_send();
+}
+document.getElementById("AI_select_2").onclick = function () {
+    get_text = document.getElementById("AI_select_2").innerHTML;
+    speech_send();
+}
+document.getElementById("AI_select_3").onclick = function () {
+    get_text = document.getElementById("AI_select_3").innerHTML;
+    speech_send();
+}
+*/
+
 // 音声認識の設定
 SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -43,34 +59,38 @@ function AISpeak(speechText) {
 
 // 音声をサーバーに送る
 function speech_send() {
-	if (get_text != null) {
-		updateText(get_text);
-		const formdata = new FormData();
-		formdata.append('text', get_text)
+    if (get_text != null) {
+        updateText(get_text);
+        const formdata = new FormData();
+        formdata.append('text', get_text)
 
-		$.ajax({
-			url: 'http://localhost:8080/menu',
-			type: 'POST',
-			dataType: 'json',
-			data: formdata,
-			processData: false,
-			contentType: false,
+        $.ajax({
+            url: 'http://localhost:8080/menu',
+            type: 'POST',
+            dataType: 'json',
+            data: formdata,
+            processData: false,
+            contentType: false,
 
-			success: function (data) {
-				AISpeak(data['say']);
-				updateText(data['say']);
-				menu = data['menus'];
-				console.log(menu);
-				updateSelect(menu[0], menu[1], menu[2]);
-			}
-		});
-		get_text = null;
-	}
+            success: function (data) {
+                AISpeak(data['say']);
+                updateText(data['say']);
+                menu = data['menus'];
+                console.log(menu);
+                if (menu[1] == "しゅうりょう") {
+                    get_text == "しゅうりょう"
+                    speech_send()
+                }
+                updateSelect(menu[0], menu[1], menu[2]);
+            }
+        });
+        get_text = null;
+    }
 }
 
 // -------画像------
 // 1秒ごとに画像をサーバーに送信する
-setInterval('img_send()', 1000);
+setInterval('img_send()', 5000);
 // 一次的ビデオ置き場
 var video = document.createElement('video');
 

@@ -30,7 +30,7 @@ def getImage():
   
   # 顔認証
   if face_check(dec_img):
-    #print('return 1')
+    print('face is looking...')
     return jsonify({'status': 1})
   else:
     #print('return 0')
@@ -48,6 +48,7 @@ from menu import Menu
 menu_controle = Menu()
 @app.route('/menu', methods=['POST'])
 def menu():
+  print("the get text: " + request.form['text'])
   say_text, next_menus = menu_controle.run(request.form['text'])
   return jsonify({'say': say_text, 'menus': next_menus})
 
