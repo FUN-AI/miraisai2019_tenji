@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json, codecs
 from os import chdir
 from pykakasi import kakasi
